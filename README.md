@@ -1,0 +1,2 @@
+# Trabajo-Parcial-de-Data-Science
+ ANÁLISIS EXPLORATORIO DE UN CONJUNTO DE DATOS EN R/RSTUDIO
