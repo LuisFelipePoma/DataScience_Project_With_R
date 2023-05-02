@@ -94,8 +94,7 @@ y_max <- max(paises_mas_1000) + 10000
 y_seq <- seq(y_min, y_max, 10000)
 
 barplot(paises_mas_1000, main = "Países con más de 1000 ocurrencias", xlab = "Países", ylab = "Ocurrencias", ylim = c(y_min, y_max), yaxp = c(y_min, y_max, length.out = length(y_seq)))
-
-barplot(paises_mas_1000, main = "Países con más de 1000 ocurrencias", xlab = "Países", ylab = "Ocurrencias")
+#barplot(paises_mas_1000, main = "Países con más de 1000 ocurrencias", xlab = "Países", ylab = "Ocurrencias")
 
 
 
