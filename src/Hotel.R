@@ -1,7 +1,7 @@
 rm(list=ls(all=TRUE)) 
 cat("\014")
 
-url <- "D:/OneDrive - Universidad Peruana de Ciencias/Documents/Carrera/2023-1/Fundamentos Data Science/TP"
+url <- "D:/OneDrive - Universidad Peruana de Ciencias/Documents/Carrera/2023-1/Fundamentos Data Science/TP/Trabajo-Parcial-de-Data-Science/src/hotel_bookings"
 setwd(url)
 hotel_data<-read.csv('hotel_bookings.csv', header=TRUE, sep=',',dec='.')
 
@@ -52,8 +52,8 @@ en_blanco(hotel_data)
 
 #[CAMPOS QUE NO UTILIZAREMOS]
 library(dplyr)
-summary(hotel_data_util)
 hotel_data_util <- select(hotel_data, -arrival_date_week_number, -adults, -children, -babies, -meal, -market_segment, -previous_bookings_not_canceled, -booking_changes, -deposit_type, -agent, -company, -reservation_status, -reservation_status_date)
+summary(hotel_data_util)
 View(hotel_data_util)
 
 sin_valor(hotel_data_util)
@@ -63,38 +63,24 @@ en_blanco(hotel_data_util)
 
 library(ggplot2) 
 library(scales)
+
 #Visualizacion grafica
 
-#1. Clientes por Pais
+#1. Países con mas afluencia
 summary(hotel_data_util)
 table(hotel_data_util$country)
-
-paises <- function(x) {
-  paises <- unique(x)
-  paises_vector <- as.vector(paises)
-  return(paises_vector)
-}
-
-summary(hotel_data_util$country)
 str(hotel_data_util)
-
-paises = hotel_data_util[["country"]]
-paises = paises(hotel_data_util$country)
-paises <- sort(paises)
-
-barplot(table(hotel_data_util$country), main="Paises de las personas del hotel", names= c(paises))
-
-prop.table(table(hotel_data_util$country))
 
 paises_ocurrencias <- table(hotel_data_util$country)
 paises_mas_1000 <- paises_ocurrencias[paises_ocurrencias > 1000]
 
-y_min <- 0
-y_max <- max(paises_mas_1000) + 10000
-y_seq <- seq(y_min, y_max, 10000)
+#y_min <- 0
+#y_max <- max(paises_mas_1000) + 10000
+#y_seq <- seq(y_min, y_max, 10000)
 
-barplot(paises_mas_1000, main = "Países con más de 1000 ocurrencias", xlab = "Países", ylab = "Ocurrencias", ylim = c(y_min, y_max), yaxp = c(y_min, y_max, length.out = length(y_seq)))
-#barplot(paises_mas_1000, main = "Países con más de 1000 ocurrencias", xlab = "Países", ylab = "Ocurrencias")
+barplot(paises_mas_1000, main = "Países con más de 1000 ocurrencias", xlab = "Países", ylab = "Ocurrencias")
 
-
-
+porcentaje_paises <- prop.table(table(hotel_data_util$country))
+porcentaje_paises_ordenado_desc <- head(round(sort(porcentaje_paises, decreasing = TRUE), 3), 10)
+porcentaje_paises_ordenado_desc <- porcentaje_paises_ordenado_desc * 100
+porcentaje_paises_ordenado_desc
