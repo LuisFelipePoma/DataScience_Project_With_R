@@ -156,10 +156,11 @@ hotel_data_summary <- hotel_data_util %>%
 
 View(hotel_data_summary)
 
-ggplot(hotel_data_summary, aes(x = interaction(arrival_date_year, arrival_date_month), y = same_count, fill = "Igual")) +
+ggplot(hotel_data_summary, aes(x = interaction(arrival_date_year, arrival_date_month), y = same_count, fill = "Coincidencia entre asignación y reserva")) +
   geom_bar(stat = "identity") +
-  geom_bar(aes(y = different_count, fill = "Diferente"), stat = "identity") +
-  scale_fill_manual(values = c("Igual" = "blue", "Diferente" = "red")) +
+  scale_y_continuous(limits = c(0, 6000), breaks = seq(0, 6000, by = 500)) +
+  geom_bar(aes(y = different_count, fill = "Diferencia entre asignación y reserva"), stat = "identity") +
+  scale_fill_manual(values = c("Coincidencia entre asignación y reserva" = "blue", "Diferencia entre asignación y reserva" = "red")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  labs(x = "Año-Mes", y = "Cantidad", fill = "") +
-  ggtitle("Cantidad de overbooking por año y mes")
+  labs(x = "Año-Mes", y = "Reservas realizadas", fill = "") +
+  ggtitle("Comparación de reservas asignadas y realizadas por año y mes")
