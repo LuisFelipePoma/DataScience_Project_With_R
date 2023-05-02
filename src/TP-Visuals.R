@@ -1,7 +1,7 @@
-setwd("C:\\Users\\pms_l\\OneDrive\\Escritorio\\uni\\Introduccion a Data Science\\Trabajo-Parcial-de-Data-Science\\src")
+setwd("D:/OneDrive - Universidad Peruana de Ciencias/Documents/Carrera/2023-1/Fundamentos Data Science/TP/Trabajo-Parcial-de-Data-Science/src/hotel_bookings")
 rm(list = ls())
 
-datos <- read.csv("hotel_bookings/hotel_bookings.csv", sep = ",")
+datos <- read.csv("hotel_bookings.csv", sep = ",")
 View(datos)
 complete.cases(datos)
 
@@ -35,10 +35,13 @@ paises_filter
 paises_names <- names(paises_filter[1,])
 paises_names
 
-## Visualizacion paises top
-barplot(paises_filter,main="Paises del Mundo Top",names = c(paises_names),legend=c("Resort","City"), ylab = "Frecuencia", xlab = "Paises")
+## Visualizacion paises top por tipo de hotel
+barplot(paises_filter,main="Países con mayor afluencia por tipo de hotel",
+        col=c("lightgray","lightpink"), 
+        names = c(paises_names), 
+        ylab = "Frecuencia", xlab = "Paises", ylim = c(0,50000))
 
-
+legend("topleft", legend=c("Resort","City"), fill = c("lightgray","lightpink"), bty = "n")
 
 # Visualizacion afluencia en fines de semana y dias de semana por tipo de hotel
 
@@ -109,3 +112,4 @@ datos.city <- datos[datos$hotel == "City Hotel",]
 
 View(datos.resort)
 View(datos.city)
+
