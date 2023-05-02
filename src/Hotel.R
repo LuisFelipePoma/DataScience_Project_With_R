@@ -142,3 +142,24 @@ porcentaje_paises_ordenado_desc <- porcentaje_paises_ordenado_desc * 100
 porcentaje_paises_ordenado_desc
 
 barplot(ocurrencias_pais, col=c("green","yellow"),legend = c("Resort","City"), main = "Aver")
+
+
+# Convertir variables factor a caracteres
+hotel_data_util$reserved_room_type <- as.character(hotel_data_util$reserved_room_type)
+hotel_data_util$assigned_room_type <- as.character(hotel_data_util$assigned_room_type)
+hotel_data_util$arrival_date_year
+
+hotel_data_summary <- hotel_data_util %>%
+  group_by(arrival_date_year, arrival_date_month) %>%
+  summarize(different_count = sum(reserved_room_type != assigned_room_type),
+            same_count = n() - different_count)
+
+View(hotel_data_summary)
+
+ggplot(hotel_data_summary, aes(x = interaction(arrival_date_year, arrival_date_month), y = same_count, fill = "Igual")) +
+  geom_bar(stat = "identity") +
+  geom_bar(aes(y = different_count, fill = "Diferente"), stat = "identity") +
+  scale_fill_manual(values = c("Igual" = "blue", "Diferente" = "red")) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  labs(x = "Año-Mes", y = "Cantidad", fill = "") +
+  ggtitle("Cantidad de overbooking por año y mes")
