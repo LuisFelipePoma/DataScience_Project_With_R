@@ -1,0 +1,9 @@
+Numero de cancelaciones -> tiempo de espera ()
+meses de afluencia 
+afluencia en fines de semana y dias de semana
+
+tipo de cliente por hotel
+
+Clientes por Pais (marketing dirigida por pais)
+
+numero de veces que la habitacion asignada fue diferente a la reservada (minimizar casos de overbooking)
