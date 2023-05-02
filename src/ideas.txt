@@ -1,5 +1,6 @@
 Numero de cancelaciones -> tiempo de espera ()
 meses de afluencia 
+
 afluencia en fines de semana y dias de semana
 
 tipo de cliente por hotel
