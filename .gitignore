@@ -1,7 +1,7 @@
 # History files
 .Rhistory
 .Rapp.history
-/src/hotel_bookings_analisis.xlsx
+/src/hotel_bookings/hotel_bookings_analisis.xlsx
 
 # Session Data files
 .RData
