@@ -71,8 +71,64 @@ summary(hotel_data_util)
 table(hotel_data_util$country)
 str(hotel_data_util)
 
-paises_ocurrencias <- table(hotel_data_util$country)
+paises <- hotel_data_util[,c("hotel","country")]
+paises <- paises[paises$country[table(paises$country) > 1000],]
+paises_tabla <- table(paises$hotel,paises$country)
+View(paises_tabla)
+names(paises_tabla)
+n <- length(paises_tabla)
+for (i in 1:n) {
+  if (paises_ocurrencias["City Hotel",i] > 1000 | paises_ocurrencias["Resort Hotel",i] > 1000) {
+    cat(paises_ocurrencias["City Hotel",i], "   ")
+    cat(nombres[1], "aver  ")
+    #paises_con_mayor_reserva[[nombres[i]]] <- reservas_por_pais[i]
+  }
+}
+
+
+
+columna_y <- paises_tabla["Var2" ]
+paises_tabla <- paises_tabla
+
+df <- subset(paises_tabla, !apply(paises_tabla[, "AGO", drop = FALSE], 1, function(x) any(x == 0)))
+# Crear un data.frame de ejemplo
+df <- data.frame(
+  x = c(1, 2, 3, 4),
+  y = c(0, 1, 2, 3),
+  z = c(4, 0, 6, 7)
+)
+View(df)
+# Eliminar las filas que contengan un cero en la columna "y"
+df <- subset(df, !apply(df[, "y", drop = FALSE] != 0, 1, all))
+
+View(paises)
+
+barplot(table(paises$hotel, paises$country), col=c("green","yellow"),legend = c("Resort","City"), main = "Aver")
+
+
+paises_ocurrencias <- table(hotel_data_util$hotel, hotel_data_util$country)
 paises_mas_1000 <- paises_ocurrencias[paises_ocurrencias > 1000]
+
+n <- length(unique(hotel_data_util$country))
+nombres <- sort(unique(hotel_data_util$country))
+
+tabla_vacia <- data.frame(matrix(nrow = 2, ncol = 0))
+nombre <- nombres[3]
+tabla_vacia$nombres[3]<- paste(1, 2)
+tabla_vacia <- cbind(tabla_vacia, nombre = c("1", "2"))
+
+for (i in 1:n) {
+  if (paises_ocurrencias["City Hotel",i] > 1000 | paises_ocurrencias["Resort Hotel",i] > 1000) {
+    cat(paises_ocurrencias["City Hotel",i], "   ")
+    cat(nombres[1], "aver  ")
+    #paises_con_mayor_reserva[[nombres[i]]] <- reservas_por_pais[i]
+  }
+}
+
+paises_con_mayor_reserva
+paises_con_mayor_reserva_df <- as.data.frame(do.call(rbind, paises_con_mayor_reserva))
+rownames(paises_con_mayor_reserva_df) <- c("Pais", "Total_Reservas")
+
 
 #y_min <- 0
 #y_max <- max(paises_mas_1000) + 10000
@@ -84,3 +140,5 @@ porcentaje_paises <- prop.table(table(hotel_data_util$country))
 porcentaje_paises_ordenado_desc <- head(round(sort(porcentaje_paises, decreasing = TRUE), 3), 10)
 porcentaje_paises_ordenado_desc <- porcentaje_paises_ordenado_desc * 100
 porcentaje_paises_ordenado_desc
+
+barplot(ocurrencias_pais, col=c("green","yellow"),legend = c("Resort","City"), main = "Aver")
