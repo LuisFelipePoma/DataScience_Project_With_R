@@ -8,7 +8,6 @@ hotel_data<-read.csv('hotel_bookings.csv', header=TRUE, sep=',',dec='.')
 View(hotel_data)
 
 head(hotel_data)
-tail(hotel_data)
 
 names(hotel_data)
 
