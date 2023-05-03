@@ -46,6 +46,7 @@ barplot(paises_filter,main="Paises del Mundo Top",names = c(paises_names),legend
 library(ggplot2)
 library(reshape2)
 library(scales)
+library(dplyr)
 
 ## Extraemos la data
 datos.hotel.stay <- datos[, c("hotel", "stays_in_week_nights", "stays_in_weekend_nights")]
@@ -78,34 +79,55 @@ porcentaje_paises_ordenado_desc <- porcentaje_paises_ordenado_desc * 100
 
 # Numero de veces que la habitacion asignada fue diferente a la reservada por hotel y por mes y año(minimizar casos de
 
+## Creamos una variable con las columnas que necesitamos
 datos.booking <- datos[, c("hotel", "arrival_date_year", "arrival_date_month",
                               "reserved_room_type","assigned_room_type")]
 
-#Creacion de una tabla Overbooking
-datos.booking$overbooking <- ifelse(datos.booking$reserved_room_type == datos.booking$assigned_room_type, "No", "Si")
+##Creacion de una tabla Overbooking
+datos.booking$overbooking <- ifelse(datos.booking$reserved_room_type == datos.booking$assigned_room_type, "Coincide", "Diferente")
 
-# Factor de las columnas
+## Factor de las columnas
 datos.booking$hotel <- factor(datos.booking$hotel)
 datos.booking$arrival_date_year <- factor(datos.booking$arrival_date_year)
 datos.booking$arrival_date_month <- factor(datos.booking$arrival_date_month)
 datos.booking$reserved_room_type <- factor(datos.booking$reserved_room_type)
 datos.booking$assigned_room_type <- factor(datos.booking$assigned_room_type)
-datos.booking$overbooking <- factor(datos.booking$overcooking)
+datos.booking$overbooking <- factor(datos.booking$overbooking)
 
-#Filtrado de columnas
+summary(datos.booking)
+
+##Filtrado de columnas
 
 datos.booking.filter.year <- datos.booking[, c("hotel", "arrival_date_year","overbooking")]
+datos.booking.filter.month <- datos.booking[, c("hotel", "arrival_date_month","overbooking")]
 
-View(datos.booking.filter.year)
 
-## Filtrado de los datos
 
-datos.booking <- paises_top[,(paises_top[2,] > 1000 & paises_top[1,] > 1000)]
+## Agrupar los datos por hotel, año y overbooking
+datos.booking.filter.year.grouped <- datos.booking.filter.year %>%
+  group_by(hotel, arrival_date_year, overbooking) %>%
+  summarize(count = n())
 
-# Separamos la tabla en dos tipos de hotel
+### Crear el gráfico de barras agrupadas
+ggplot(datos.booking.filter.year.grouped, aes(x = arrival_date_year, y = count, fill = overbooking)) +
+  geom_col(position = position_dodge()) +
+  facet_wrap(~ hotel, ncol = 2) +
+  labs(title = "Cantidad de overbookings por año y por hotel",
+       x = "Año",
+       y = "Cantidad",
+       fill = "Overbooking")
 
-datos.resort <- datos[datos$hotel == "Resort Hotel" ]
-datos.city <- datos[datos$hotel == "City Hotel",]
+## Agrupar los datos por hotel, mes y overbooking
+datos.booking.filter.month.grouped <- datos.booking.filter.month %>%
+  group_by(hotel, arrival_date_month, overbooking) %>%
+  summarize(count = n())
 
-View(datos.resort)
-View(datos.city)
+### Crear el gráfico de barras agrupadas
+ggplot(datos.booking.filter.month.grouped, aes(x = arrival_date_month, y = count, fill = overbooking)) +
+  geom_col(position = position_dodge()) +
+  facet_wrap(~ hotel, ncol = 2) +
+  labs(title = "Comparacion de reservas realizadas por mes y por hotel",
+       x = "Mes",
+       y = "Reservas realizadas",
+       fill = "Estado")
+
