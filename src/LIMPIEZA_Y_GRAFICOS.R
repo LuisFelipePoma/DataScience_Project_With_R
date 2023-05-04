@@ -337,8 +337,6 @@ summary(datos)
 # Visualizacion afluencia en fines de semana y dias de semana por tipo de hotel
 
 
-##----------------------------------- Version 1 --------------------------------------------
-
 ## Seleccionar las columnas necesarias
 datos.hotel.stay <- datos[, c("hotel","arrival_date_month","stays_in_week_nights", "stays_in_weekend_nights")]
 
@@ -358,34 +356,6 @@ ggplot(datos.hotel.resume, aes(x = arrival_date_month, y = stays_in_week_nights,
   theme_minimal() +
   scale_fill_manual(values = c("Días de semana" = "#2E8B57", "Fin de semana" = "#FFA500")) +
   theme(plot.title = element_text(hjust = 0.2, size = 16, face = "italic"))
-
-
-##----------------------------------- Version 2 --------------------------------------------
-### Resumir los datos por hotel, mes y tipo de estadía (días de semana o fin de semana)
-datos.hotel.stay <- datos[, c("hotel","arrival_date_month", "stays_in_weekend_nights","stays_in_week_nights")]
-datos.hotel.stay.group <- aggregate(cbind(stays_in_week_nights, stays_in_weekend_nights) ~ hotel + arrival_date_month, data = datos.hotel.stay, FUN = sum)
-
-### Calcular el total de noches de estadía por mes y hotel
-total_mes_hotel <- datos.hotel.stay.group %>%
-  group_by(arrival_date_month, hotel) %>%
-  summarize(total_noche = sum(stays_in_week_nights) + sum(stays_in_weekend_nights)) 
-
-### Calcular el porcentaje de noches de estadía por mes y hotel con respecto al total
-datos.hotel.stay.group <- datos.hotel.stay.group %>%
-  left_join(total_mes_hotel, by = c("arrival_date_month", "hotel")) %>%
-  mutate(pct_week_nights = 100*stays_in_week_nights/total_noche,
-         pct_weekend_nights = 100*stays_in_weekend_nights/total_noche)
-
-### Crear la gráfica
-ggplot(datos.hotel.stay.group, aes(x = arrival_date_month, y = stays_in_week_nights, fill = "Días de semana")) +
-  geom_col(position = "dodge") +
-  geom_col(aes(y = stays_in_weekend_nights, fill = "Fin de semana"), position = "dodge") +
-  facet_wrap(~ hotel, ncol = 2, scales = "free_y") +
-  labs(x = "Mes", y = "Noches de estadía", fill = "") +
-  theme_minimal() +
-  geom_text(aes(label = paste0(round(pct_week_nights),"%")), position = position_dodge(0.9), vjust = -0.5) +
-  geom_text(aes(y = stays_in_weekend_nights, label = paste0(round(pct_weekend_nights),"%")), position = position_dodge(0.9), vjust = 1.5)
-
 
 #----------------------------------------------------------------------------------------------------------
 
@@ -471,21 +441,5 @@ porcentaje <- round((paises_filter / total) * 100, 2)
 # Mostrar la tabla de porcentajes resultante
 porcentaje
 #-------------------------------------------------------------------------------------------------
-#Seleccion y agrupacion segun la funcion same_count
-datos.hotel.reservas <- datos %>%
-  group_by(arrival_date_year, arrival_date_month) %>%
-  summarize(different_count = sum(as.character(reserved_room_type) != as.character(assigned_room_type)),
-            same_count = n() - different_count)
-
-#Comparación de reservas asignadas y realizadas por año y mes--------------------------------------
-ggplot(datos.hotel.reservas, aes(x = interaction(arrival_date_year, arrival_date_month), y = same_count, fill = "Coincidencia entre asignación y reserva")) +
-  geom_bar(stat = "identity") +
-  scale_y_continuous(limits = c(0, 6000), breaks = seq(0, 6000, by = 500)) +
-  geom_bar(aes(y = different_count, fill = "Diferencia entre asignación y reserva"), stat = "identity") +
-  scale_fill_manual(values = c("Coincidencia entre asignación y reserva" = "blue", "Diferencia entre asignación y reserva" = "red")) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  labs(x = "Año-Mes", y = "Reservas realizadas", fill = "") +
-  ggtitle("Comparación de reservas asignadas y realizadas por año y mes")
-#----------------------------------------------------------------------------------------------------
 
 >>>>>>> 39a9ca23ec711e4ede5b341d8338e958e5886228
