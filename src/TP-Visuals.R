@@ -85,6 +85,7 @@ datos.booking <- datos[, c("hotel", "arrival_date_year", "arrival_date_month",
 
 ##Creacion de una tabla Overbooking
 datos.booking$overbooking <- ifelse(datos.booking$reserved_room_type == datos.booking$assigned_room_type, "Coincide", "Diferente")
+summary(datos.booking$assigned_room_type)
 
 ## Factor de las columnas
 datos.booking$hotel <- factor(datos.booking$hotel)
